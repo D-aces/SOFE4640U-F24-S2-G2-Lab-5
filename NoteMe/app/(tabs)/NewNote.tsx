@@ -1,7 +1,33 @@
-import { StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 import { View } from '@/components/Themed';
+import { addNote } from '@/database/database'; // Import the addNote function
 
-export default function TabTwoScreen() {
+export default function NewNoteScreen() {
+  // State to manage input fields
+  const [title, setTitle] = useState('');
+  const [subtitle, setSubtitle] = useState('');
+  const [body, setBody] = useState('');
+
+  // Function to handle saving the note
+  const handleSave = () => {
+    if (!title.trim() || !body.trim()) {
+      Alert.alert('Error', 'Title and body cannot be empty!');
+      return;
+    }
+
+    // Save the note to the database
+    addNote(title, subtitle, body);
+
+    // Reset input fields
+    setTitle('');
+    setSubtitle('');
+    setBody('');
+
+    // Confirm save to the user
+    Alert.alert('Success', 'Note saved successfully!');
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>New Note</Text>
@@ -11,11 +37,15 @@ export default function TabTwoScreen() {
         style={styles.input}
         placeholder="Enter title"
         placeholderTextColor="#999"
+        value={title}
+        onChangeText={setTitle} // Update the state on text change
       />
       <TextInput
         style={styles.input}
         placeholder="Enter subtitle"
         placeholderTextColor="#999"
+        value={subtitle}
+        onChangeText={setSubtitle} // Update the state on text change
       />
       <TextInput
         style={[styles.input, styles.bodyInput]}
@@ -23,9 +53,11 @@ export default function TabTwoScreen() {
         placeholderTextColor="#999"
         multiline
         numberOfLines={4}
+        value={body}
+        onChangeText={setBody} // Update the state on text change
       />
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleSave}>
         <Text style={styles.buttonText}>Save</Text>
       </TouchableOpacity>
     </View>
@@ -36,7 +68,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'top',
+    justifyContent: 'flex-start', // Changed to align items at the top
     paddingHorizontal: 20,
     paddingVertical: 30,
   },
