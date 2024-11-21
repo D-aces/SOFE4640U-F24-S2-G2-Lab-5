@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, FlatList, Text, View, TouchableOpacity } from 'react-native';
+
 import { initializeDatabase, getNotes } from '../../database/database';
 
 export default function TabOneScreen() {
