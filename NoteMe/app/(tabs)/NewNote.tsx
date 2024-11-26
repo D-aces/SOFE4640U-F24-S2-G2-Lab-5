@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 import { View } from '@/components/Themed';
-import { addNote } from '@/database/database'; // Import the addNote function
+import { initializeDatabase, getNotes } from '../database';
+import { useRouter } from 'expo-router';
+import { addNote } from '../database'
 
 export default function NewNoteScreen() {
   // State to manage input fields
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
   const [body, setBody] = useState('');
+  const router = useRouter()
 
   // Function to handle saving the note
   const handleSave = () => {
@@ -25,7 +28,9 @@ export default function NewNoteScreen() {
     setBody('');
 
     // Confirm save to the user
-    Alert.alert('Success', 'Note saved successfully!');
+    Alert.alert('Success', 'Note saved successfully!', [
+          { text: 'OK', onPress: () => router.push('/') }, // Navigate to index.tsx
+        ]);
   };
 
   return (
